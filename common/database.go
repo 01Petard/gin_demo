@@ -3,28 +3,31 @@ package common
 import (
 	"fmt"
 	"gin_demo/model"
+	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"net/url"
 )
 
 var DB *gorm.DB
 
 func InitDB() {
-	host := "1.94.147.176"
-	port := "3306"
-	database := "gin_demo"
-	username := "root"
-	password := "kjiolluy711"
-	charset := "utf8mb4"
+	host := viper.GetString("datasource.host")
+	port := viper.GetString("datasource.port")
+	database := viper.GetString("datasource.database")
+	username := viper.GetString("datasource.username")
+	password := viper.GetString("datasource.password")
+	charset := viper.GetString("datasource.charset")
+	loc := viper.GetString("datasource.loc")
 
 	// MySQL 连接字符串
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=Local",
-		username, password, host, port, database, charset)
+	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=True&loc=%s",
+		username, password, host, port, database, charset, url.QueryEscape(loc))
 
 	// 连接 MySQL
 	var err error
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(mysql.Open(args), &gorm.Config{})
 	if err != nil {
 		log.Fatal("数据库连接失败:", err)
 	}

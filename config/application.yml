@@ -1,0 +1,10 @@
+server:
+  port: 8080
+datasource:
+  host: 1.94.147.176
+  port: 3306
+  database: gin_demo
+  username: root
+  password: kjiolluy711
+  charset: utf8mb4
+  loc: Asia/Shanghai
